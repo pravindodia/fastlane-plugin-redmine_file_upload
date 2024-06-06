@@ -1,9 +1,9 @@
-describe Fastlane::Actions::RedmineUploadAction do
+describe Fastlane::Actions::RedmineFileUploadAction do
   describe '#run' do
     it 'prints a message' do
-      expect(Fastlane::UI).to receive(:message).with("The redmine_upload plugin is working!")
+      expect(Fastlane::UI).to receive(:message).with("The redmine_file_upload plugin is working!")
 
-      Fastlane::Actions::RedmineUploadAction.run(nil)
+      Fastlane::Actions::RedmineFileUploadAction.run(nil)
     end
   end
 end

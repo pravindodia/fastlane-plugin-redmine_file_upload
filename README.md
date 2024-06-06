@@ -1,34 +1,32 @@
-# redmine_upload plugin
+# redmine_file_upload plugin
 
-[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-redmine_upload)
+[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-redmine_file_upload)
 
 ## Forked From 
 
-This project is a Forked from [_This Archived Repo_](https://github.com/salmattia/fastlane-plugin-redmine_upload)
+This project is a Forked from [_This Archived Repo_](https://github.com/salmattia/fastlane-plugin-redmine_file_upload)
 
 Main reason is to use the functionality in new Ryby Version as the old repo only supports Ruby 2.x now the current supports 3.3 or more, as we have tested upto Ruby Version 3.3
 Pull Request are welcome. 
 
 ## Getting Started
 
-below method does not work for Ruby version 3.0 and above. Though from version 4.0.0 it will work so check the version when the gem is installed.
-
-This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-redmine_upload`, add it to your project by running:
+This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-redmine_file_upload`, add it to your project by running:
 
 ```bash
-fastlane add_plugin redmine_upload
+fastlane add_plugin redmine_file_upload
 ```
 
-This method works, 
+You may use the below method too if you wish but not advised.
 
 For now to implement this you will have to add below like to your Pluginfile
 
 ```bash
-gem "fastlane-plugin-redmine_upload", git: "https://github.com/pravindodia/fastlane-plugin-redmine_upload"
+gem "fastlane-plugin-redmine_file_upload", git: "https://github.com/pravindodia/fastlane-plugin-redmine_file_upload"
 ```
 
 
-## About redmine_upload
+## About redmine_file_upload
 
 A fastlane plugin to upload file contents to Redmine
 

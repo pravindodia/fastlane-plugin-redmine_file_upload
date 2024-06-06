@@ -1,7 +1,7 @@
-require 'fastlane/plugin/redmine_upload/version'
+require 'fastlane/plugin/redmine_file_upload/version'
 
 module Fastlane
-  module RedmineUpload
+  module RedmineFileUpload
     # Return all .rb files inside the "actions" and "helper" directory
     def self.all_classes
       Dir[File.expand_path('**/{actions,helper}/*.rb', File.dirname(__FILE__))]
@@ -11,6 +11,6 @@ end
 
 # By default we want to import all available actions and helpers
 # A plugin can contain any number of actions and plugins
-Fastlane::RedmineUpload.all_classes.each do |current|
+Fastlane::RedmineFileUpload.all_classes.each do |current|
   require current
 end

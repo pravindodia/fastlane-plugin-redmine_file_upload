@@ -1,5 +1,5 @@
 lane :test do
-  redmine_upload(
+  redmine_file_upload(
     redmine_host: 'https://pm.rultech.com',
     redmine_api_key: 'd85a6caed35890cb7461f3479daa14cb530459b9',
     redmine_use_ssl: 'true',

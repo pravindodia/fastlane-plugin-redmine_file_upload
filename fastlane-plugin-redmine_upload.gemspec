@@ -2,16 +2,16 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fastlane/plugin/redmine_upload/version'
+require 'fastlane/plugin/redmine_file_upload/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'fastlane-plugin-redmine_upload'
-  spec.version       = Fastlane::RedmineUpload::VERSION
-  spec.author        = 'Mattia Salvetti'
-  spec.email         = 'mattia.salvetti3@gmail.it'
+  spec.name          = 'fastlane-plugin-redmine_file_upload'
+  spec.version       = Fastlane::RedmineFileUpload::VERSION
+  spec.author        = 'Pravin Dodia'
+  spec.email         = 'pravindodia@gmail.com'
 
   spec.summary       = 'A fastlane plugin to upload file contents to Redmine'
-  spec.homepage      = "https://github.com/pravindodia/fastlane-plugin-redmine_upload"
+  spec.homepage      = "https://github.com/pravindodia/fastlane-plugin-redmine_file_upload"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)

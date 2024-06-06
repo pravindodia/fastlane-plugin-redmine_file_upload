@@ -1,5 +1,5 @@
 require 'fastlane/action'
-require_relative '../helper/redmine_upload_helper'
+require_relative '../helper/redmine_file_upload_helper'
 
 module Fastlane
   module Actions
@@ -7,7 +7,7 @@ module Fastlane
       REDMINE_UPLOAD_FILE_TOKEN = :REDMINE_UPLOAD_FILE_TOKEN
       REDMINE_UPLOAD_FILE_NAME = :REDMINE_UPLOAD_FILE_NAME
     end
-    class RedmineUploadAction < Action
+    class RedmineFileUploadAction < Action
       def self.run(params)
         require 'net/http'
         require 'net/http/uploadprogress'
