@@ -4,14 +4,10 @@
 
 ## Forked From 
 
-This project is a Forked from [_This_Archived_Repo_](https://github.com/pravindodia/fastlane-plugin-redmine_upload?tab=readme-ov-file)
+This project is a Forked from [_This Archived Repo_](https://github.com/salmattia/fastlane-plugin-redmine_upload)
 
 Main reason is to use the functionality in new Ryby Version as the old repo only supports Ruby 2.x now the current supporst 3.3 or more, as we have tested upto Ruby Version 3.3
 Pull Request are welcome. 
-
-For now to implement this you will have to add below like to your Pluginfile
-
-gem "fastlane-plugin-redmine_upload", git: "https://github.com/[user]/[plugin_name]"
 
 ## Getting Started
 
