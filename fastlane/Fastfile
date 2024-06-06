@@ -1,15 +1,15 @@
 lane :test do
   redmine_file_upload(
-    redmine_host: 'https://pm.rultech.com',
-    redmine_api_key: 'd85a6caed35890cb7461f3479daa14cb530459b9',
+    redmine_host: 'https://www.redmine.org',
+    redmine_api_key: 'api-key',
     redmine_use_ssl: 'true',
-    file_path: "/Users/pravindodia/Downloads/login_bg.jpg"
+    file_path: "/path/to/file"
   )
   redmine_file_post(
-    redmine_host: 'https://pm.rultech.com',
-    redmine_api_key: 'd85a6caed35890cb7461f3479daa14cb530459b9',
+    redmine_host: 'https://www.redmine.org',
+    redmine_api_key: 'api-key',
     redmine_use_ssl: 'true',
-    redmine_project: 'testflowfeatures',
+    redmine_project: 'project_id',
     file_name: lane_context[SharedValues:: REDMINE_UPLOAD_FILE_NAME],
     file_token: lane_context[SharedValues::REDMINE_UPLOAD_FILE_TOKEN],
     file_version: "",
