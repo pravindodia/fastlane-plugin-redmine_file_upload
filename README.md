@@ -11,7 +11,8 @@ Pull Request are welcome.
 
 ## Getting Started
 
-below method does not work for Ruby version 3.0 and above.
+below method does not work for Ruby version 3.0 and above. Though from version 4.0.0 it will work so check the version when the gem is installed.
+
 This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-redmine_upload`, add it to your project by running:
 
 ```bash
