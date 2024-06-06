@@ -6,7 +6,7 @@
 
 This project is a Forked from [_This Archived Repo_](https://github.com/salmattia/fastlane-plugin-redmine_upload)
 
-Main reason is to use the functionality in new Ryby Version as the old repo only supports Ruby 2.x now the current supporst 3.3 or more, as we have tested upto Ruby Version 3.3
+Main reason is to use the functionality in new Ryby Version as the old repo only supports Ruby 2.x now the current supports 3.3 or more, as we have tested upto Ruby Version 3.3
 Pull Request are welcome. 
 
 ## Getting Started
