@@ -8,13 +8,18 @@ module Fastlane
 
         redmine_url = params[:redmine_host]
         api_key = params[:redmine_api_key]
+        redmine_use_sslhost = "true"
         username = params[:redmine_username]
         password = params[:redmine_password]
         project = params[:redmine_project]
-        token = params[:file_token]
+        token =  params[:file_token]
         file_name = params[:file_name]
         file_version = params[:file_version]
         file_description = params[:file_description]
+
+        unless redmine_use_sslhost.nil?
+          redmine_use_sslhost = params[:redmine_use_ssl]
+        end
 
         upload_file_uri = URI.parse(redmine_url + "/projects/#{project}/files.json")
         # prepare request with token previously got from upload
@@ -40,6 +45,10 @@ module Fastlane
 
         # Create the HTTP objects
         http_file_post = Net::HTTP.new(upload_file_uri.host, upload_file_uri.port)
+        if redmine_use_sslhost == "true"
+          http_file_post.use_ssl = true
+          http_file_post.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
         request_file = Net::HTTP::Post.new(upload_file_uri.request_uri)
 
         request_file["Content-Type"] = "application/json"
@@ -101,6 +110,11 @@ module Fastlane
                                description: "Redmine API key (optional). username and password can be provided instead",
                                   optional: true,
                                       type: String),
+          FastlaneCore::ConfigItem.new(key: :redmine_use_ssl,
+                                      env_name: "REDMINE_USE_SSL",
+                                   description: "Redmine USE_SSL key (optional). it use use plain http instead of https",
+                                      optional: true,
+                                          type: String),  
           FastlaneCore::ConfigItem.new(key: :redmine_project,
                                   env_name: "REDMINE_PROJECT",
                                description: "Project of redmine",

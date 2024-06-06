@@ -22,10 +22,15 @@ module Fastlane
 
         redmine_url = params[:redmine_host]
         api_key = params[:redmine_api_key]
+        redmine_use_sslhost = "true"
         username = params[:redmine_username]
         password = params[:redmine_password]
 
-        upload_content_uri = URI.parse(redmine_url + '/uploads.json')
+        unless redmine_use_sslhost.nil?
+          redmine_use_sslhost = params[:redmine_use_ssl]
+        end
+
+        upload_content_uri = URI.parse(redmine_url + '/uploads.json'+'?filename='+file_name)
         UI.message("Start file upload \"#{file_name}\" to Redmine API #{upload_content_uri}")
 
         token = nil
@@ -33,8 +38,14 @@ module Fastlane
         File.open(file_path, 'rb') do |io|
           # Create the HTTP objects
           http_upload_content = Net::HTTP.new(upload_content_uri.host, upload_content_uri.port)
-          request_upload_content = Net::HTTP::Post.new(upload_content_uri.request_uri)
 
+          if redmine_use_sslhost == "true"
+            http_upload_content.use_ssl = true
+            http_upload_content.verify_mode = OpenSSL::SSL::VERIFY_NONE
+          end
+
+          request_upload_content = Net::HTTP::Post.new(upload_content_uri.request_uri)
+          UI.message("Request upload content #{upload_content_uri.port}")
           request_upload_content["Content-Type"] = "application/octet-stream"
           unless api_key.nil?
             request_upload_content["X-Redmine-API-Key"] = api_key.to_s
@@ -47,7 +58,7 @@ module Fastlane
           request_upload_content.body_stream = io
           # print upload progress
           Net::HTTP::UploadProgress.new(request_upload_content) do |progress|
-            printf("\rUploading \"#{file_name}\"...  #{100 * progress.upload_size / io.size}%")
+             printf("\rUploading \"#{file_name}\"...  #{100 * progress.upload_size / io.size}%%")
           end
           # Send the request
           response_upload_content = http_upload_content.request(request_upload_content)
@@ -60,8 +71,8 @@ module Fastlane
           UI.success("Content uploaded! File token released: #{token}")
           Actions.lane_context[SharedValues::REDMINE_UPLOAD_FILE_TOKEN] = token
         else
-          UI.error(response_upload_content.value)
-          end
+          UI.error(response_upload_content.to_s)
+        end
       end
 
       def self.description
@@ -111,6 +122,11 @@ module Fastlane
                                description: "Redmine API key (optional). username and password can be provided instead",
                                   optional: true,
                                       type: String),
+          FastlaneCore::ConfigItem.new(key: :redmine_use_ssl,
+                                      env_name: "REDMINE_USE_SSL",
+                                   description: "Redmine USE_SSL key (optional). it use use plain http instead of https",
+                                      optional: true,
+                                          type: String),  
           FastlaneCore::ConfigItem.new(key: :file_path,
                                   env_name: "FILE_PATH",
                                description: "Local path of file to upload to redmine",

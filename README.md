@@ -2,13 +2,34 @@
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-redmine_upload)
 
+## Forked From 
+
+This project is a Forked from [_This_Archived_Repo_](https://github.com/pravindodia/fastlane-plugin-redmine_upload?tab=readme-ov-file)
+
+Main reason is to use the functionality in new Ryby Version as the old repo only supports Ruby 2.x now the current supporst 3.3 or more, as we have tested upto Ruby Version 3.3
+Pull Request are welcome. 
+
+For now to implement this you will have to add below like to your Pluginfile
+
+gem "fastlane-plugin-redmine_upload", git: "https://github.com/[user]/[plugin_name]"
+
 ## Getting Started
 
+below method does not work for Ruby version 3.0 and above.
 This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-redmine_upload`, add it to your project by running:
 
 ```bash
 fastlane add_plugin redmine_upload
 ```
+
+This method works, 
+
+For now to implement this you will have to add below like to your Pluginfile
+
+```bash
+gem "fastlane-plugin-redmine_upload", git: "https://github.com/pravindodia/fastlane-plugin-redmine_upload"
+```
+
 
 ## About redmine_upload
 
