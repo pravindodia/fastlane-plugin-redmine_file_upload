@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = 'mattia.salvetti3@gmail.it'
 
   spec.summary       = 'A fastlane plugin to upload file contents to Redmine'
-  spec.homepage      = "https://github.com/salmattia/fastlane-plugin-redmine_upload"
+  spec.homepage      = "https://github.com/pravindodia/fastlane-plugin-redmine_upload"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
