@@ -1,0 +1,161 @@
+require 'fastlane/action'
+require_relative '../helper/redmine_file_upload_helper'
+
+module Fastlane
+  module Actions
+    module SharedValues
+      REDMINE_UPLOAD_FILE_TOKEN = :REDMINE_UPLOAD_FILE_TOKEN
+      REDMINE_UPLOAD_FILE_NAME = :REDMINE_UPLOAD_FILE_NAME
+    end
+    class RedmineFileUploadAction < Action
+      def self.run(params)
+        require 'net/http'
+        require 'net/http/uploadprogress'
+        require 'uri'
+        require 'json'
+
+        # getting parameters
+        file_path = params[:file_path]
+        version_number =  ''
+        project_name =  ''
+
+        if ENV.key?('BUILD_CODE') && !ENV['BUILD_CODE'].empty? && !ENV['BUILD_CODE'].nil?
+          version_number =  "V" + ENV['BUILD_CODE'] + "_"
+        end
+        if ENV.key?('PROJECT_NAME')
+          project_name = ENV['PROJECT_NAME']
+        end
+        current_date = Time.new.strftime('%d_%m_%Y')
+        new_file_path = File.dirname(file_path) + "/#{project_name}App_" + version_number + current_date+File.extname(file_path) unless file_path.nil?
+        File.rename(file_path,new_file_path);
+        file_name = File.basename(new_file_path) unless new_file_path.nil?
+        file_path  = new_file_path
+        
+
+
+        Actions.lane_context[SharedValues::REDMINE_UPLOAD_FILE_NAME] = file_name
+
+        redmine_url = params[:redmine_host]
+        api_key = params[:redmine_api_key]
+        redmine_use_sslhost = "true"
+        username = params[:redmine_username]
+        password = params[:redmine_password]
+
+        unless redmine_use_sslhost.nil?
+          redmine_use_sslhost = params[:redmine_use_ssl]
+        end
+
+        upload_content_uri = URI.parse(redmine_url + '/uploads.json'+'?filename='+file_name)
+        UI.message("Start file upload \"#{file_name}\" to Redmine API #{upload_content_uri}")
+
+        token = nil
+        response_upload_content = nil
+        File.open(file_path, 'rb') do |io|
+          # Create the HTTP objects
+          http_upload_content = Net::HTTP.new(upload_content_uri.host, upload_content_uri.port)
+
+          if redmine_use_sslhost == "true"
+            http_upload_content.use_ssl = true
+            http_upload_content.verify_mode = OpenSSL::SSL::VERIFY_NONE
+          end
+
+          request_upload_content = Net::HTTP::Post.new(upload_content_uri.request_uri)
+          request_upload_content["Content-Type"] = "application/octet-stream"
+          unless api_key.nil?
+            request_upload_content["X-Redmine-API-Key"] = api_key.to_s
+          end
+          unless username.nil? || password.nil?
+            request_upload_content.basic_auth(username, password)
+          end
+
+          request_upload_content.content_length = io.size
+          request_upload_content.body_stream = io
+          # print upload progress
+          Net::HTTP::UploadProgress.new(request_upload_content) do |progress|
+             printf("\rUploading \"#{file_name}\"...  #{100 * progress.upload_size / io.size}%%")
+          end
+          # Send the request
+          response_upload_content = http_upload_content.request(request_upload_content)
+          printf("\n")
+        end
+        case response_upload_content
+        when Net::HTTPSuccess
+          # get token from upload content response
+          token = JSON.parse(response_upload_content.body)['upload']['token']
+          UI.success("Content uploaded! File token released: #{token}")
+          Actions.lane_context[SharedValues::REDMINE_UPLOAD_FILE_TOKEN] = token
+        else
+          UI.error(response_upload_content.to_s)
+        end
+      end
+
+      def self.description
+        "A fastlane plugin to upload file contents to Redmine"
+      end
+
+      def self.authors
+        ["Mattia Salvetti"]
+      end
+
+      def self.output
+        [
+          ['REDMINE_UPLOAD_FILE_TOKEN', 'Token release as response of redmine POST /uploads.json'],
+          ['REDMINE_UPLOAD_FILE_NAME', 'Uploading file name']
+        ]
+      end
+
+      def self.return_value
+        "Returns a token released from redmine http POST to /uploads.json."
+      end
+
+      def self.details
+        # Optional:
+        "This plugin uses Redmine REST API to attach a generic file and release a token to use for attachment binding to any Redmine entity. It makes a http request to a redmine host POST /uploads.json
+        See APIs documentations at http://www.redmine.org/projects/redmine/wiki/Rest_api"
+      end
+
+      def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(key: :redmine_host,
+                                  env_name: "REDMINE_HOST",
+                               description: "Redmine host where upload file. e.g. ",
+                                  optional: false,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :redmine_username,
+                                  env_name: "REDMINE_USERNAME",
+                               description: "Redmine username (optional). An API key can be provided instead",
+                                  optional: true,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :redmine_password,
+                                  env_name: "REDMINE_PASSWORD",
+                               description: "Redmine password (optional). An API key can be provided instead",
+                                  optional: true,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :redmine_api_key,
+                                  env_name: "REDMINE_API_KEY",
+                               description: "Redmine API key (optional). username and password can be provided instead",
+                                  optional: true,
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :redmine_use_ssl,
+                                      env_name: "REDMINE_USE_SSL",
+                                   description: "Redmine USE_SSL key (optional). it use use plain http instead of https",
+                                      optional: true,
+                                          type: String),  
+          FastlaneCore::ConfigItem.new(key: :file_path,
+                                  env_name: "FILE_PATH",
+                               description: "Local path of file to upload to redmine",
+                                  optional: false,
+                                      type: String)
+        ]
+      end
+
+      def self.is_supported?(platform)
+        # Adjust this if your plugin only works for a particular platform (iOS vs. Android, for example)
+        # See: https://docs.fastlane.tools/advanced/#control-configuration-by-lane-and-by-platform
+        #
+        # [:ios, :mac, :android].include?(platform)
+        true
+      end
+    end
+  end
+end
